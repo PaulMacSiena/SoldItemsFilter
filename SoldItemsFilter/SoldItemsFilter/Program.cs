@@ -2,6 +2,7 @@
 { 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class SoldItem: IComparable
     {
@@ -36,7 +37,7 @@
                 return this.name.CompareTo((obj as SoldItem).name);
                 //for now, SoldItems will be compared by the name attribute
             }
-            throw new ArgumentException("Object is not a User");
+            throw new ArgumentException("Object is not a SoldItem");
         }
 
         /*
@@ -51,14 +52,33 @@
 
         /*
          * Filters out items from list based off of 
-         *  - if they are profitable (if price < cost, there)
+         *  - if they are not profitable (if price < cost, there is no profit)
+         *  - if the item was sold more than once
          */
         public static List<SoldItem> SoldItemsFilter(List<SoldItem> items)
         {
-            items.RemoveAll(notProfitable);
-            return items;
+            items.RemoveAll(notProfitable); // remove all items not sold at a profit
+
+            List<String> dupSerials = FindDuplicates(items); //get duplicate Serial Codes
+
+            List<SoldItem> itemsSoldOnce = new List<SoldItem>(); // create new list for items only sold once
+
+            // add all items that were only sold once to list
+            foreach(SoldItem i in items)
+            {
+                //if serial code was not duplicated, item was sold only 1 time
+                if (!dupSerials.Contains(i.serialNumber))
+                {
+                    itemsSoldOnce.Add(i);
+                }
+            }
+            return itemsSoldOnce;
         }
 
+        /*
+         * Predicate to determine if an item is not profitable
+         * ex salesprice <= cost
+         */
         private static bool notProfitable(SoldItem item)
         {
             if (item.salesPrice <= item.cost)
@@ -66,6 +86,30 @@
                 return true;
             }
             return false;
+        }
+
+        /*
+         * Returns list of serial numbers for items that occur
+         * multiple times in the inputed list
+         */
+        public static List<String> FindDuplicates(List<SoldItem> items)
+        {
+            List<String> origSnumbers = new List<String>();
+            List<String> duplicateSnumbers = new List<String>();
+
+            foreach (SoldItem item in items)
+            {
+                if (origSnumbers.Contains(item.serialNumber))
+                {
+                    duplicateSnumbers.Add(item.serialNumber);
+                }
+                else
+                {
+                    origSnumbers.Add(item.serialNumber);
+                }
+            }
+
+            return duplicateSnumbers;
         }
 
         // Main Method to print output to console
@@ -84,9 +128,14 @@
               new SoldItem(8,"Werther's Original", "WO-8",12,75,"Andy Ghadban"),
               new SoldItem(9,"tonka truck passenger door", "TT-PD-9",336,275,"Jean-Luc Picard"),
               new SoldItem(10,"ARMY surplus Canned Beef", "5-ARMYCB",12,6000,"Frank Castle"),
-              new SoldItem(11,"SwashBuckler's Buckled Swashes", "RS1",122,160,"Harry Lewis")
+              new SoldItem(11,"SwashBuckler's Buckled Swashes", "SBBS11",122,160,"Harry Lewis")
         };
 
+            //List<String> dups = FindDuplicates(soldItems);
+            //foreach(String dup in dups)
+            //{
+            //    Console.WriteLine(dup);
+            //}
             Console.WriteLine("Original List: ");
 
             foreach (SoldItem item in soldItems)
