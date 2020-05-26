@@ -49,6 +49,25 @@
                 this.salesPrice + ", salesPerson: " + this.salesPerson;
         }
 
+        /*
+         * Filters out items from list based off of 
+         *  - if they are profitable (if price < cost, there)
+         */
+        public static List<SoldItem> SoldItemsFilter(List<SoldItem> items)
+        {
+            items.RemoveAll(notProfitable);
+            return items;
+        }
+
+        private static bool notProfitable(SoldItem item)
+        {
+            if (item.salesPrice <= item.cost)
+            {
+                return true;
+            }
+            return false;
+        }
+
         // Main Method to print output to console
         public static void Main()
         {
@@ -77,12 +96,23 @@
             }
 
             Console.WriteLine("-----------");
-            Console.WriteLine("Sorted List: ");
-            soldItems.Sort();
+            Console.WriteLine("Filtered List: "); //only profit at this point
 
-            foreach (SoldItem item in soldItems)
+            List<SoldItem> filteredItems = SoldItemsFilter(soldItems);
+
+            foreach (SoldItem item in filteredItems)
             {
-                // Display Sort List
+                // Display Filtered List
+                Console.WriteLine(item.toString());
+            }
+
+            Console.WriteLine("-----------");
+            Console.WriteLine("Sorted List: ");
+            filteredItems.Sort();
+
+            foreach (SoldItem item in filteredItems)
+            {
+                // Display Sorted List
                 Console.WriteLine(item.toString());
             }
 
