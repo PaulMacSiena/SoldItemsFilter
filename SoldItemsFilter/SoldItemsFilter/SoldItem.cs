@@ -127,13 +127,16 @@
         }
 
         /*
+         * Helper function to find items sold more than once
          * Returns list of serial numbers for items that occur
          * multiple times in the inputed list
+         * @param items: The list of sold items to search through
+         * @return: A list of strings for the serial numbers that occur more than once in the items list
          */
-        public static List<String> FindDuplicates(List<SoldItem> items)
+        public static List<string> FindDuplicates(List<SoldItem> items)
         {
-            List<String> origSnumbers = new List<String>();
-            List<String> duplicateSnumbers = new List<String>();
+            List<string> origSnumbers = new List<string>();
+            List<string> duplicateSnumbers = new List<string>();
 
             foreach (SoldItem item in items)
             {
@@ -153,6 +156,9 @@
         /*
          * Iterates through a list of SoldItems, and returns a new list with only items in the format:
          * serial number consists of the capital letters of item name joined with item ID (punctuation and casing ignored)
+         * Time complexity O(n) where where n is length of items list
+         * @param items: The list of sold items to search through
+         * @return: a list with only items with properly formated serial numbers
          */
         public static List<SoldItem> SerialFormat(List<SoldItem> items)
         {
@@ -160,27 +166,36 @@
 
             foreach (SoldItem item in items)
             {
-                String itemName = @item.name;
-                String capitalLetters = String.Concat(itemName.Where(c => c >= 'A' && c <= 'Z'));
+                string itemName = @item.name;
+                //build a string that contains all the capital letters of the name variable in SoldItem
+                string capitalLetters = string.Concat(itemName.Where(c => c >= 'A' && c <= 'Z')); 
 
-                String serialNoPunctuation = item.serialNumber.Replace("-","");
+                //remove the punctuation from the serial number for equality comparison
+                string serialNoPunctuation = item.serialNumber.Replace("-",""); //ASSUME punctuation is only a '-' character
+
+                //build a regex that is just all the capital letters of a name plus the id of the item
                 Regex rx = new Regex(capitalLetters + item.id);
 
+                //if the regex matches, add the item to the returned list
                 if (rx.IsMatch(serialNoPunctuation))
                 {
-                    //Console.WriteLine("Added: " + item.toString());
                     serialFormattedItems.Add(item);
-                }
-                else
-                {
-                    //Console.WriteLine("Could not add: " + item.toString());
                 }
             }
             return serialFormattedItems;
 
         }
 
-        public static int CalculateSalesPersonProfit(String salesPersonName, List<SoldItem> items)
+        /*
+         * Static method that returns the profit of a particular sales Person (given by name)
+         * and a list of sold items
+         * Time efficiency: O(n) where n is length of soldItems list 
+         * Space efficiency: O(1), size does not depend on input
+         * @param salesPersonName: The name of the salesPerson
+         * @param items: The list of sold items to search through
+         * @return Total Profit from all sales of an individual sales person
+         */
+        public static int CalculateSalesPersonProfit(string salesPersonName, List<SoldItem> items)
         {
             int profit = 0;
 
@@ -194,22 +209,28 @@
            
         }
 
+        /*
+         * Static method that sets salesPersonProfit attribute of SoldItem. Area to target for refactoring efficiency.
+         * Time efficiency: O(n^2 *m) where n is length of items list and m is amount of unique names in items list
+         * Space efficiency: O(m) where m is amount of unique names in items list
+         * @param soldItems: The list of sold items to search through
+         */
         public static void SetProfits(List<SoldItem> soldItems)
         {
-            List<String> salesPeople = new List<String>();
-            var query = soldItems.GroupBy(item => item.salesPerson);
-            foreach (var group in query)
+            List<string> salesPeople = new List<string>();
+
+            foreach(SoldItem item in soldItems) //add the names of all the salespeople to its own list O(n)
             {
-                foreach (var person in group)
+                if (!salesPeople.Contains(item.salesPerson)) //add to list if name is not already in it
                 {
-                    salesPeople.Add(person.salesPerson);
+                    salesPeople.Add(item.salesPerson);
                 }
             }
-            //Console.WriteLine("Original List: ");
-            foreach (String person in salesPeople)
+
+            foreach (string person in salesPeople) //set the profits field for each sales person
+            // O(n^2 *m) where n is length of items list and m is amount of unique names in items list
             {
-                int profit = CalculateSalesPersonProfit(person, soldItems);
-                //Console.WriteLine("Andy's Profit: " + CalculateSalesPersonProfit(person, soldItems));
+                int profit = CalculateSalesPersonProfit(person, soldItems); //O(n)
 
                 //set person's profits everywhere
                 foreach (SoldItem item in soldItems)
@@ -223,9 +244,9 @@
         }
 
         // Main Method to print output to console
-        public static void Main(string[] args)
+        public static void Main()
         {
-
+            //initialize data
             List<SoldItem> soldItems = new List<SoldItem>
             {
                   new SoldItem(1,"Rock Salt", "RS1",10,50,"Andy Ghadban"),
@@ -239,10 +260,14 @@
                   new SoldItem(9,"tonka truck passenger door", "TT-PD-9",336,275,"Jean-Luc Picard"),
                   new SoldItem(10,"ARMY surplus Canned Beef", "5-ARMYCB",12,6000,"Frank Castle"),
                   new SoldItem(11,"SwashBuckler's Buckled Swashes", "SBBS11",122,160,"Harry Lewis")
+
             };
 
-            Console.WriteLine("Original List: "); 
-            foreach (SoldItem item in soldItems)
+            List<SoldItem> original = soldItems;
+            List<SoldItem> filteredAndSorted = SoldItemsFilter(soldItems);
+
+            Console.WriteLine("Original List: ");
+            foreach (SoldItem item in original)
             {
                 // Display Original List
                 Console.WriteLine(item.toString());
@@ -251,11 +276,9 @@
             Console.WriteLine("----------------------------------------");
             Console.WriteLine("Filtered and Sorted List: ");
 
-            List<SoldItem> filteredAndSorted = SoldItemsFilter(soldItems);
-
             foreach (SoldItem item in filteredAndSorted)
             {
-                // Display Sorted List
+                // Display Filtered and Sorted List
                 Console.WriteLine(item.toString());
             }
 
