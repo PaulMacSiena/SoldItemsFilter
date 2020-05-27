@@ -15,7 +15,10 @@ Programming Decisions made/implemented:
 * Remove all items that are not profitable (salesPrice - cost)  
 * Find all items in soldItems that were sold only once, and then add those to a new list  
 * From this new list, filter out all items with invalid serialNumbers (see criteria at top of readme)  
-* Sort the list of filtered items based off of profitability of each item  
+* Sort the list of filtered items based off of profitability of the items sales person (descending)
+* SoldItem implements the IComparable Interface and the corresponding CompareTo() function, so the list of sold items can be sorted using the generic List sorting method (quicksort)  
+* Group the remain solditems by the profitability of each salesPerson, so that the remaining list is now completed filtered and sorted by profitablity of each salesPerson. Within each group, the items are sorted by total profit (descending)  
+* Return the filtered and sorted list  
   
   
 Assumptions Made:  
