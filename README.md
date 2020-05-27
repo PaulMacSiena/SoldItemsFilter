@@ -7,11 +7,17 @@ A c# program with a function that takes in a list of sold items and filters the 
   
 After the list is filtered, the resulting list in descending order of the overall most profitable salespeople (sales people with greatest difference between SalesPrices and Costs).  
   
+Programming Decisions made/implemented:  
+* Created a SoldItem data structure to store the data for each sold items
+* Stored all soldItems in a generic list of SoldItem
+* Created the primary function SoldItemsFilter(List<SoldItem> soldItems) to filter and sort all items according to criteria above
+  
 Assumptions Made:  
+* The data for soldItems can be stored in a SoldItem Object
 * The punction for serial codes of a SoldItem is limited to a "-" character. 
 * When sorting by most profitable salesperson, the sorting criteria is based off of the original data, not the filtered data
   
-Time/Space Complexity of SoldItemsFilter(soldItems:   
+Time/Space Complexity of SoldItemsFilter(soldItems):   
 * Worst Case Time Efficiency is O(n^2 * m), where n is number of items in the list of sold Items, and m is the amount of unique items.  
 * Worst Cast Space Efficiency is O(n), where n is number items in soldItems. A few methods within SoldItemsFilter() create a new generic list, which in the worst case will be size n.  
 * This worst case time efficiency is due to the method SetProfits() called inside of SoldItemsFilter(), where SetProfits is called once with a nested loop structure. The SetProfits static method is an area to target for refactoring efficiency.  
