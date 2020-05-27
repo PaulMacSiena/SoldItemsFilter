@@ -7,7 +7,7 @@ A c# program with a function that takes in a list of sold items and filters the 
   
 After the list is filtered, the resulting list in descending order of the overall most profitable salespeople (sales people with greatest difference between SalesPrices and Costs).  
   
-Programming Decisions made/implemented:  
+Programming Decisions made/implemented: (SoldItem.cs also contains detailed comments explaining though process)  
 * Created a SoldItem data structure to store the data for each sold items
 * Stored all soldItems in a generic list of SoldItem
 * Created the primary function SoldItemsFilter(List<SoldItem> soldItems) to filter and sort all items according to criteria above
