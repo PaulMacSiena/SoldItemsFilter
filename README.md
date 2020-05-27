@@ -11,6 +11,12 @@ Programming Decisions made/implemented:
 * Created a SoldItem data structure to store the data for each sold items
 * Stored all soldItems in a generic list of SoldItem
 * Created the primary function SoldItemsFilter(List<SoldItem> soldItems) to filter and sort all items according to criteria above
+* Within SoldItemsFilter, call SetProfits(), which calculates the profit for every sales person and updates the field within SoldItem to stores the total profit of a sales person. This attribute is used to sort soldItems list later on  
+* Remove all items that are not profitable (salesPrice - cost)  
+* Find all items in soldItems that were sold only once, and then add those to a new list  
+* From this new list, filter out all items with invalid serialNumbers (see criteria at top of readme)  
+* Sort the list of filtered items based off of profitability of each item  
+  
   
 Assumptions Made:  
 * The data for soldItems can be stored in a SoldItem Object
