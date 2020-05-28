@@ -73,7 +73,7 @@ namespace SoldItemsFilter
          *  - if the item was sold more than once
          *  - serial number consists of the capital letters of their name joined with their ID(punctuation and casing ignored)
          *  After being filtered, the list is sorted by the most profitable
-         *  Time complexity: O(n^2 * m), due to complexity of SetProfts() method
+         *  Time complexity: O(n^2), due to complexity of SetProfts() method
          *  Space complexity: O(n), due to space complexity of FindDuplicates
          *  @param items: The list of sold items to filter and sort
          *  @return a new list of sold items, filtered and sorted according to criteria
@@ -81,7 +81,7 @@ namespace SoldItemsFilter
         public static List<SoldItem> SoldItemsFilter(List<SoldItem> items)
         {
             // static method that stores the profits of each salesPerson with each item
-            SetProfits(items); //O(n ^ 2 * m) time, this method should be an area to target for refactoring
+            SetProfits(items); //O(n ^ 2) time, this method should be an area to target for refactoring
 
             // remove all items not sold at a profit
             items.RemoveAll(notProfitable);
@@ -230,7 +230,7 @@ namespace SoldItemsFilter
 
         /*
          * Static method that sets salesPersonProfit attribute of SoldItem. Area to target for refactoring efficiency.
-         * Time complexity: O(n^2 *m) where n is length of items list and m is amount of unique names in items list
+         * Time complexity: O(n^2) where n is length of items list 
          * Space complexity: O(m) where m is amount of unique names in items list
          * @param soldItems: The list of sold items to search through
          */
@@ -247,7 +247,7 @@ namespace SoldItemsFilter
             }
 
             foreach (string person in salesPeople) //set the profits field for each sales person
-            // O(n^2 *m) where n is length of items list and m is amount of unique names in items list
+            // O(n^2) where n is length of items list
             {
                 int profit = CalculateSalesPersonProfit(person, soldItems); //O(n)
 
